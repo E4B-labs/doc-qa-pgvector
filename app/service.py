@@ -182,14 +182,25 @@ class DocumentService:
         started = time.perf_counter()
         vector = (await self.embedding_provider.embed([question]))[0]
         results = await self.search(question, vector, top_k)
-        top_similarity = results[0].similarity if results else None
+        top_similarity = max((result.similarity for result in results), default=None)
         if top_similarity is None or top_similarity < self.settings.similarity_threshold:
             answer = "I don't know based on the indexed documents."
         else:
-            answer = await asyncio.wait_for(
-                self.llm_provider.generate(question, [result.as_context() for result in results]),
-                timeout=self.settings.llm_timeout_seconds,
-            )
+            try:
+                answer = await asyncio.wait_for(
+                    self.llm_provider.generate(
+                        question, [result.as_context() for result in results]
+                    ),
+                    timeout=self.settings.llm_timeout_seconds,
+                )
+            except TimeoutError:
+                await self._audit(
+                    question,
+                    "LLM request timed out.",
+                    top_similarity,
+                    time.perf_counter() - started,
+                )
+                raise
         await self._audit(question, answer, top_similarity, time.perf_counter() - started)
         return answer, results, top_similarity
 

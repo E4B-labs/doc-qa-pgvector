@@ -152,6 +152,8 @@ async def test_query_timeout_returns_504(database, settings) -> None:
         )
         response = await test_client.post("/query", json={"question": "timeout source"})
     assert response.status_code == 504
+    async with database.acquire() as connection:
+        assert await connection.fetchval("SELECT count(*) FROM query_log") == 1
 
 
 @pytest.mark.asyncio
