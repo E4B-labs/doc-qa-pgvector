@@ -70,6 +70,9 @@ curl -H "content-type: application/json" -d '{"question":"Why use HNSW?"}' http:
 For real providers, put API keys in local environment variables only:
 `OPENAI_API_KEY` and `ANTHROPIC_API_KEY`. `.env.example` intentionally contains no values.
 
+The compose database is exposed on host port `15432` to avoid collisions with other local
+PostgreSQL containers; the API uses service-internal port `5432`.
+
 ## Quality and CI
 
 ```bash
@@ -79,4 +82,3 @@ pytest -q
 ```
 
 GitHub Actions runs all three checks against a real `pgvector/pgvector:pg16` service container.
-

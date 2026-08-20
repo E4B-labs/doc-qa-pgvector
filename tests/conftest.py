@@ -10,7 +10,8 @@ from app.db import Database
 @pytest_asyncio.fixture
 async def database() -> Database:
     url = os.environ.get(
-        "TEST_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/docqa")
+        "TEST_DATABASE_URL",
+        os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:15432/docqa"),
     )
     database = Database(url)
     await database.connect()

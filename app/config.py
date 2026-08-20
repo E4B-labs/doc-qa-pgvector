@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    database_url: str = "postgresql://postgres:postgres@localhost:5432/docqa"
+    database_url: str = "postgresql://postgres:postgres@localhost:15432/docqa"
     embedding_provider: str = "openai"
     openai_api_key: str | None = None
     openai_embedding_model: str = "text-embedding-3-small"
@@ -16,4 +16,3 @@ class Settings(BaseSettings):
     similarity_threshold: float = 0.35
     embedding_dimensions: int = 1536
     rrf_k: int = 60
-
