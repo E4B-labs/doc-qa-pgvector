@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doc-qa-pgvector"
+version = "0.1.0"
+description = "Production-minded document Q&A API with PostgreSQL and pgvector"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "asyncpg>=0.29,<1",
+  "fastapi>=0.115,<1",
+  "httpx>=0.27,<1",
+  "pgvector>=0.3,<1",
+  "pydantic-settings>=2.6,<3",
+  "pypdf>=5,<6",
+  "python-multipart>=0.0.9,<1",
+  "uvicorn[standard]>=0.32,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.13,<2",
+  "pytest>=8.3,<9",
+  "pytest-asyncio>=0.24,<1",
+  "ruff>=0.8,<1",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+allow_subclassing_any = true
+

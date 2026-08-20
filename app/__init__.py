@@ -1,0 +1,2 @@
+"""Document Q&A application."""
+
